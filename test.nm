@@ -1,0 +1,15 @@
+main()
+{
+	var x,y;
+	x = 1+2*y=3+4;
+	writeln(x++" "++y);
+	writeln(fibo(25));
+	writeln(fibo(26));
+	writeln(fibo(27));
+}
+
+fibo(n)
+{
+	if n<2 { return 1; };
+	fibo(n-1)+fibo(n-2);
+}
