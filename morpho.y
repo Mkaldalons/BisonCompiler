@@ -66,12 +66,25 @@ expr
 	:	op expr %prec UNOP 	{$$ = new Object[]{"CALL",$op,new Object[]{$2}};}
 	|	RETURN expr		{$$ = new Object[]{"RETURN",$2};}
 	;
+
+exprs
+	:	%empty
+	;
+
 op
 	:	OP1|OP2|OP3|OP4|OP5|OP6|OP7
 	;
 
 ifexpr
 	:	%empty
+	;
+
+body
+	: %empty
+	;
+
+decls
+	: %empty
 	;
 
 %%
