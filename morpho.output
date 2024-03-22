@@ -1,0 +1,276 @@
+Nonterminals useless in grammar
+
+    optargs
+    args
+    varcount
+    expr
+    op
+    ifexpr
+    body
+
+
+Terminals unused in grammar
+
+    WHILE
+    IF
+    ELSE
+    VAR
+    LITERAL
+    OP1
+    OP2
+    OP3
+    OP4
+    OP5
+    OP6
+    OP7
+    RETURN
+    '='
+    OR
+    AND
+    NOT
+
+
+Rules useless in grammar
+
+   11 varcount: ε
+
+   12 expr: op expr
+   13     | RETURN expr
+
+   14 op: OP1
+   15   | OP2
+   16   | OP3
+   17   | OP4
+   18   | OP5
+   19   | OP6
+   20   | OP7
+
+   21 ifexpr: ε
+
+   22 body: ε
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: program
+
+    2 program: program function
+    3        | function
+
+    4 function: NAME '(' optnames ')' '{' decls exprs '}'
+
+    5 optnames: ε
+    6         | names
+
+    7 names: names ',' NAME
+    8      | NAME
+
+    9 exprs: ε
+
+   10 decls: ε
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '(' (40) 4
+    ')' (41) 4
+    ',' (44) 7
+    '=' (61)
+    '{' (123) 4
+    '}' (125) 4
+    error (256)
+    WHILE (258)
+    IF (259)
+    ELSE (260)
+    VAR (261)
+    NAME <String> (262) 4 7 8
+    LITERAL <String> (263)
+    OP1 <String> (264)
+    OP2 <String> (265)
+    OP3 <String> (266)
+    OP4 <String> (267)
+    OP5 <String> (268)
+    OP6 <String> (269)
+    OP7 <String> (270)
+    RETURN (271)
+    OR (272)
+    AND (273)
+    NOT (274)
+    UNOP (275)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (27)
+        on left: 0
+    start (28)
+        on left: 1
+        on right: 0
+    program <Vector<Object[]>> (29)
+        on left: 2 3
+        on right: 1 2
+    function <Object[]> (30)
+        on left: 4
+        on right: 2 3
+    optnames (31)
+        on left: 5 6
+        on right: 4
+    names (32)
+        on left: 7 8
+        on right: 6 7
+    exprs <Vector<Object[]>> (33)
+        on left: 9
+        on right: 4
+    decls (34)
+        on left: 10
+        on right: 4
+
+
+State 0
+
+    0 $accept: • start $end
+
+    NAME  shift, and go to state 1
+
+    start     go to state 2
+    program   go to state 3
+    function  go to state 4
+
+
+State 1
+
+    4 function: NAME • '(' optnames ')' '{' decls exprs '}'
+
+    '('  shift, and go to state 5
+
+
+State 2
+
+    0 $accept: start • $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 start: program •
+    2 program: program • function
+
+    NAME  shift, and go to state 1
+
+    $default  reduce using rule 1 (start)
+
+    function  go to state 7
+
+
+State 4
+
+    3 program: function •
+
+    $default  reduce using rule 3 (program)
+
+
+State 5
+
+    4 function: NAME '(' • optnames ')' '{' decls exprs '}'
+
+    NAME  shift, and go to state 8
+
+    $default  reduce using rule 5 (optnames)
+
+    optnames  go to state 9
+    names     go to state 10
+
+
+State 6
+
+    0 $accept: start $end •
+
+    $default  accept
+
+
+State 7
+
+    2 program: program function •
+
+    $default  reduce using rule 2 (program)
+
+
+State 8
+
+    8 names: NAME •
+
+    $default  reduce using rule 8 (names)
+
+
+State 9
+
+    4 function: NAME '(' optnames • ')' '{' decls exprs '}'
+
+    ')'  shift, and go to state 11
+
+
+State 10
+
+    6 optnames: names •
+    7 names: names • ',' NAME
+
+    ','  shift, and go to state 12
+
+    $default  reduce using rule 6 (optnames)
+
+
+State 11
+
+    4 function: NAME '(' optnames ')' • '{' decls exprs '}'
+
+    '{'  shift, and go to state 13
+
+
+State 12
+
+    7 names: names ',' • NAME
+
+    NAME  shift, and go to state 14
+
+
+State 13
+
+    4 function: NAME '(' optnames ')' '{' • decls exprs '}'
+
+    $default  reduce using rule 10 (decls)
+
+    decls  go to state 15
+
+
+State 14
+
+    7 names: names ',' NAME •
+
+    $default  reduce using rule 7 (names)
+
+
+State 15
+
+    4 function: NAME '(' optnames ')' '{' decls • exprs '}'
+
+    $default  reduce using rule 9 (exprs)
+
+    exprs  go to state 16
+
+
+State 16
+
+    4 function: NAME '(' optnames ')' '{' decls exprs • '}'
+
+    '}'  shift, and go to state 17
+
+
+State 17
+
+    4 function: NAME '(' optnames ')' '{' decls exprs '}' •
+
+    $default  reduce using rule 4 (function)
