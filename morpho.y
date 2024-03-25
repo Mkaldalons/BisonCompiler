@@ -49,7 +49,7 @@ varcount
 	;
 
 function
-	:	NAME	'(' optnames ')' '{' decls exprs '}'
+	:	NAME	'(' optnames varcount ')' '{' decls exprs '}'
 	;
 
 optnames
@@ -68,7 +68,8 @@ expr
 	;
 
 exprs
-	:	%empty
+	:	exprs ',' expr { ((Vector<Object[]>)$1).add($expr); $$ = $1; }
+	|	expr { $$ = new Vector<Object[]>(); ((Vector<Object[]>)$$).add($expr); }
 	;
 
 op
@@ -80,7 +81,7 @@ ifexpr
 	;
 
 body
-	: %empty
+	: body	'{' , { expr, ';' }, '}'
 	;
 
 decls
