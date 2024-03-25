@@ -77,7 +77,7 @@ op
 	;
 
 ifexpr
-	:	%empty
+	:	'if' , '(' , expr, ')' body, { 'elsif', '(', expr, ')', body},[ 'else', body]
 	;
 
 body
@@ -85,7 +85,7 @@ body
 	;
 
 decls
-	: %empty
+	: VAR, NAME, { ',' , NAME }
 	;
 
 %%
