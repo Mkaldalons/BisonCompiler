@@ -77,15 +77,23 @@ op
 	;
 
 ifexpr
-	:	'if' , '(' , expr, ')' body, { 'elsif', '(', expr, ')', body},[ 'else', body]
+	:	IF '(' expr ')' body { 'ifelse' '(' expr ')' body} ELSE '(' expr ')' body
 	;
 
 body
-	: body	'{' , { expr, ';' }, '}'
+	:	body '{'  { expr, ';' } '}'
 	;
 
 decls
-	: VAR, NAME, { ',' , NAME }
+	:	VAR ',' NAME ',' { ',' , NAME }
+	;
+
+args
+	:	args ',' args
+
+optargs
+	:	%empty
+	|	optargs
 	;
 
 %%
