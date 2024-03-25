@@ -49,7 +49,9 @@ varcount
 	;
 
 function
-	:	NAME	'(' optnames varcount ')' '{' decls exprs '}'
+	:	{ varCount=0; varTable=new HashMap<String, Integer>(); }
+		NAME '(' optnames varcount ')' '{' decls exprs '}'
+		{ $$ = new Object[]{$NAME,$varcount,varCount-$varcount,$exprs}; }
 	;
 
 optnames
@@ -63,8 +65,11 @@ names
 	;
 
 expr
-	:	op expr %prec UNOP 	{$$ = new Object[]{"CALL",$op,new Object[]{$2}};}
-	|	RETURN expr		{$$ = new Object[]{"RETURN",$2};}
+    : expr OR expr    { $$ = new Object[]{"OR", $1, $3}; }
+    | expr AND expr   { $$ = new Object[]{"AND", $1, $3}; }
+    | NOT expr        { $$ = new Object[]{"NOT", $2}; }
+    | op expr         { $$ = new Object[]{"CALL", $op, new Object[]{$2}}; }
+    | RETURN expr     { $$ = new Object[]{"RETURN", $2}; }
 	;
 
 exprs
@@ -77,22 +82,27 @@ op
 	;
 
 ifexpr
-	:	IF '(' expr ')' body { 'ifelse' '(' expr ')' body} ELSE '(' expr ')' body
-	;
+    :	IF '(' expr ')' body { $$ = new Object[]{"IF", $3, $5}; }
+    |	IF '(' expr ')' body ELSE body { $$ = new Object[]{"IFELSE", $3, $5, $7}; }
+    ;
 
 body
 	:	body '{'  { expr, ';' } '}'
 	;
 
 decls
-	:	VAR ',' NAME ',' { ',' , NAME }
+    :	%empty
+    |	decls VAR NAME { addVar($NAME); }
+    |	decls VAR NAME ',' names
+    ;
+
 	;
 
 args
 	:	args ',' args
 
 optargs
-	:	%empty
+	:	%empty 
 	|	optargs
 	;
 
