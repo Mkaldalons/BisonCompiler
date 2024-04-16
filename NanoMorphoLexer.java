@@ -294,10 +294,10 @@ public class NanoMorphoLexer implements NanoMorphoParser.Lexer {
     "\1\6\1\7\2\6\10\4\1\5\1\0\1\7\1\0"+
     "\1\10\4\0\2\4\1\11\5\4\1\12\2\0\1\7"+
     "\1\0\5\4\1\13\1\4\1\0\2\14\1\15\1\7"+
-    "\2\4\1\0\1\7\1\16\2\4\1\17\1\20\1\21";
+    "\2\4\1\0\1\7\1\16\1\4\1\17\1\20";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[65];
+    int [] result = new int[63];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -328,12 +328,11 @@ public class NanoMorphoLexer implements NanoMorphoParser.Lexer {
     "\0\u02ac\0\114\0\u02d2\0\u02f8\0\u031e\0\u0344\0\u036a\0\u0390"+
     "\0\230\0\u03b6\0\u03dc\0\u0402\0\u0428\0\u044e\0\114\0\u0474"+
     "\0\u049a\0\u04c0\0\u04e6\0\u050c\0\u0532\0\u0558\0\u057e\0\u05a4"+
-    "\0\230\0\u05ca\0\u05f0\0\46\0\u0616\0\u063c\0\230\0\u0662"+
-    "\0\u0688\0\u06ae\0\u06ae\0\46\0\u06d4\0\u06fa\0\230\0\230"+
-    "\0\230";
+    "\0\230\0\u05ca\0\u05f0\0\46\0\u0616\0\230\0\230\0\u063c"+
+    "\0\u0662\0\u0688\0\u0688\0\46\0\u06ae\0\230\0\230";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[65];
+    int [] result = new int[63];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -401,16 +400,14 @@ public class NanoMorphoLexer implements NanoMorphoParser.Lexer {
     "\6\0\3\6\2\0\1\6\1\0\2\6\1\67\13\6"+
     "\12\0\1\6\6\0\3\6\2\0\1\6\1\0\6\6"+
     "\1\71\7\6\17\0\1\72\1\0\3\73\26\0\1\74"+
-    "\53\0\1\6\6\0\3\6\2\0\1\6\1\0\5\6"+
-    "\1\75\10\6\12\0\1\6\6\0\3\6\2\0\1\6"+
-    "\1\0\10\6\1\76\5\6\12\0\1\6\6\0\3\6"+
-    "\2\0\1\6\1\0\2\6\1\77\13\6\21\0\3\73"+
-    "\34\0\1\6\6\0\3\6\2\0\1\6\1\0\3\6"+
-    "\1\100\12\6\12\0\1\6\6\0\3\6\2\0\1\6"+
-    "\1\0\7\6\1\101\6\6\2\0";
+    "\53\0\1\6\6\0\3\6\2\0\1\6\1\0\10\6"+
+    "\1\75\5\6\12\0\1\6\6\0\3\6\2\0\1\6"+
+    "\1\0\2\6\1\76\13\6\21\0\3\73\34\0\1\6"+
+    "\6\0\3\6\2\0\1\6\1\0\7\6\1\77\6\6"+
+    "\2\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[1824];
+    int [] result = new int[1748];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -455,10 +452,10 @@ public class NanoMorphoLexer implements NanoMorphoParser.Lexer {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\2\11\6\1\1\11\14\1\1\0\1\11\1\0"+
     "\1\1\4\0\11\1\2\0\1\1\1\0\7\1\1\0"+
-    "\1\11\5\1\1\0\1\1\1\11\5\1";
+    "\1\11\5\1\1\0\1\1\1\11\3\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[65];
+    int [] result = new int[63];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -975,24 +972,22 @@ public void yyerror( String error )
             { return -1;
             }
           // fall through
-          case 18: break;
+          case 17: break;
           case 2:
             { 
             }
           // fall through
-          case 19: break;
+          case 18: break;
           case 3:
-            { lexeme2 = yytext();
-    return Parser.NOTEXPR;
+            { return NOT;
+            }
+          // fall through
+          case 19: break;
+          case 4:
+            { return NAME;
             }
           // fall through
           case 20: break;
-          case 4:
-            { lexeme2 = yytext();
-    return Parser.NAME;
-            }
-          // fall through
-          case 21: break;
           case 5:
             { switch( yycharat(0) )
     {
@@ -1022,43 +1017,37 @@ public void yyerror( String error )
     throw new Error("This can't happen");
             }
           // fall through
-          case 22: break;
+          case 21: break;
           case 6:
-            { lexeme2 = yytext();
-    return yycharat(0);
+            { return yycharat(0);
+            }
+          // fall through
+          case 22: break;
+          case 7:
+            { return LITERAL;
             }
           // fall through
           case 23: break;
-          case 7:
-            { lexeme2 = yytext();
-    return Parser.LITERAL;
+          case 8:
+            { return AND;
             }
           // fall through
           case 24: break;
-          case 8:
-            { lexeme2 = yytext();
-    return Parser.ANDEXPR;
+          case 9:
+            { return IF;
             }
           // fall through
           case 25: break;
-          case 9:
-            { lexeme2 = yytext();
-    return Parser.IF;
+          case 10:
+            { return OR;
             }
           // fall through
           case 26: break;
-          case 10:
-            { lexeme2 = yytext();
-    return Parser.OREXPR;
+          case 11:
+            { return VAR;
             }
           // fall through
           case 27: break;
-          case 11:
-            { lexeme2 = yytext();
-    return Parser.VAR;
-            }
-          // fall through
-          case 28: break;
           case 12:
             // lookahead expression with fixed lookahead length
             zzMarkedPos = Character.offsetByCodePoints
@@ -1066,13 +1055,12 @@ public void yyerror( String error )
             { 
             }
           // fall through
-          case 29: break;
+          case 28: break;
           case 13:
-            { lexeme2 = yytext();
-    return Parser.ELSE;
+            { return ELSE;
             }
           // fall through
-          case 30: break;
+          case 29: break;
           case 14:
             // lookahead expression with fixed lookahead length
             zzMarkedPos = Character.offsetByCodePoints
@@ -1080,25 +1068,17 @@ public void yyerror( String error )
             { 
             }
           // fall through
-          case 31: break;
+          case 30: break;
           case 15:
-            { lexeme2 = yytext();
-    return Parser.WHILE;
+            { return WHILE;
+            }
+          // fall through
+          case 31: break;
+          case 16:
+            { return RETURN;
             }
           // fall through
           case 32: break;
-          case 16:
-            { lexeme2 = yytext();
-    return Parser.ELSEIF;
-            }
-          // fall through
-          case 33: break;
-          case 17:
-            { lexeme2 = yytext();
-    return Parser.RETURN;
-            }
-          // fall through
-          case 34: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

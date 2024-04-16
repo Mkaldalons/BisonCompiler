@@ -49,32 +49,49 @@ varcount
 	;
 
 function
-	:	{ varCount=0; varTable=new HashMap<String, Integer>(); }
-		NAME '(' optnames varcount ')' '{' decls exprs '}'
-		{ $$ = new Object[]{$NAME,$varcount,varCount-$varcount,$exprs}; }
+	:	NAME '('
+		{ varTable = new HashMap<String,Integer>();	varCount=0; }
+		optnames ')'
+		varcount
+		'{' decls exprs '}'
+		{ $$ = new Object[]{$NAME,$varcount,varCount-$varcount,$exprs}; }	
 	;
 
 optnames
-	:	%empty
-	|	names
+	:	names
+	|	%empty
 	;
 
 names
-	:	names ',' NAME {addVar ($NAME);}
-	|	NAME {addVar ($NAME)}
+	:	names ',' NAME { addVar ($NAME); }
+	|	NAME { addVar ($NAME); }
 	;
 
 expr
-    : expr OR expr    { $$ = new Object[]{"OR", $1, $3}; }
-    | expr AND expr   { $$ = new Object[]{"AND", $1, $3}; }
-    | NOT expr        { $$ = new Object[]{"NOT", $2}; }
-    | op expr         { $$ = new Object[]{"CALL", $op, new Object[]{$2}}; }
-    | RETURN expr     { $$ = new Object[]{"RETURN", $2}; }
+    :	RETURN expr				{ $$ = new Object[]{"RETURN", $2}; }
+	|	NAME '=' expr			{ $$ = new Object[]{"STORE",findVar($NAME),$3}; }
+	|	expr OR expr			{ $$ = new Object[]{"OR",$1,$3}; }
+	|	expr AND expr			{ $$ = new Object[]{"AND",$1,$3}; }
+	|	NOT expr				{ $$ = new Object[]{"NOT",$2}; }
+	|	expr OP1 expr			{ $$ = new Object[]{"CALL",$OP1,new Object[]{$1,$3}}; }
+	|	expr OP2 expr			{ $$ = new Object[]{"CALL",$OP2,new Object[]{$1,$3}}; }
+	|	expr OP3 expr			{ $$ = new Object[]{"CALL",$OP3,new Object[]{$1,$3}}; }
+	|	expr OP4 expr			{ $$ = new Object[]{"CALL",$OP4,new Object[]{$1,$3}}; }
+	|	expr OP5 expr			{ $$ = new Object[]{"CALL",$OP5,new Object[]{$1,$3}}; }
+	|	expr OP6 expr			{ $$ = new Object[]{"CALL",$OP6,new Object[]{$1,$3}}; }
+	|	expr OP7 expr			{ $$ = new Object[]{"CALL",$OP7,new Object[]{$1,$3}}; }
+	|	ifexpr					{ $$ = $ifexpr; }
+	|	WHILE expr body			{ $$ = new Object[]{"WHILE",$2,$body}; }
+	|	op expr %prec UNOP 		{ $$ = new Object[]{"CALL",$op,new Object[]{$2}}; }
+	|	NAME					{ $$ = new Object[]{"FETCH",findVar($NAME)}; }
+	|	NAME '(' optargs ')'	{ $$ = new Object[]{"CALL",$NAME,$optargs.toArray()}; }
+	|	LITERAL					{ $$ = new Object[]{"LITERAL",$LITERAL}; }
+	|	'(' expr ')'			{ $$ = $2;}
 	;
 
 exprs
-	:	exprs ',' expr { ((Vector<Object[]>)$1).add($expr); $$ = $1; }
-	|	expr { $$ = new Vector<Object[]>(); ((Vector<Object[]>)$$).add($expr); }
+	:	exprs expr ';'	{ $$ = $1; ((Vector<Object[]>)$$).add($expr); }
+	|	expr ';'	{ $$ = new Vector<Object[]>(); ((Vector<Object[]>)$$).add($expr); }
 	;
 
 op
@@ -82,28 +99,32 @@ op
 	;
 
 ifexpr
-    :	IF '(' expr ')' body { $$ = new Object[]{"IF", $3, $5}; }
-    |	IF '(' expr ')' body ELSE body { $$ = new Object[]{"IFELSE", $3, $5, $7}; }
-    ;
+	:	IF expr body				{ $$ = new Object[]{"IF1",$expr,$body}; }
+	|	IF expr body ELSE body		{ $$ = new Object[]{"IF2",$expr,$3,$5}; }
+	|	IF expr body ELSE ifexpr	{ $$ = new Object[]{"IF2",$expr,$body,$5}; }
+	;
 
 body
-	:	body '{'  { expr, ';' } '}'
+	:	'{' exprs '}'	{ $$ = new Object[]{"BODY",$exprs}; }
 	;
 
 decls
-    :	%empty
-    |	decls VAR NAME { addVar($NAME); }
-    |	decls VAR NAME ',' names
+    :	decls decl ';'
+    |	%empty
     ;
 
+decl
+	:	VAR names
 	;
 
 args
-	:	args ',' args
+	:	args ',' expr	{ ((Vector<Object[]>)$$).add($expr); }
+	|	expr	{ $$ = new Vector<Object[]>(); ((Vector<Object[]>)$$).add($expr); }
+	;
 
 optargs
-	:	%empty 
-	|	optargs
+	:	args
+	|	%empty { $$ = new Vector<Object[]>(); }
 	;
 
 %%

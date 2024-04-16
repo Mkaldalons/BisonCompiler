@@ -49,63 +49,47 @@ _OPNAME=[\+\-*/!%&=><\:\^\~&|?]+
   /* Scanner rules */
 
 {_DELIM} {
-    lexeme2 = yytext();
     return yycharat(0);
 }
 
 {_STRING} | {_FLOAT} | {_CHAR} | {_INT} | null | true | false {
-    lexeme2 = yytext();
-    return Parser.LITERAL;
+    return LITERAL;
 }
 
 "&&" {
-    lexeme2 = yytext();
-    return Parser.ANDEXPR;
+    return AND;
 }
 
 "||" {
-    lexeme2 = yytext();
-    return Parser.OREXPR;
+    return OR;
 }
 
 "!" {
-    lexeme2 = yytext();
-    return Parser.NOTEXPR;
+    return NOT;
 }
 
 "if" {
-    lexeme2 = yytext();
-    return Parser.IF;
+    return IF;
 }
 
 "else" {
-    lexeme2 = yytext();
-    return Parser.ELSE;
-}
-
-"elseif" {
-    lexeme2 = yytext();
-    return Parser.ELSEIF;
+    return ELSE;
 }
 
 "while" {
-    lexeme2 = yytext();
-    return Parser.WHILE;
+    return WHILE;
 }
 
 "var" {
-    lexeme2 = yytext();
-    return Parser.VAR;
+    return VAR;
 }
 
 "return" {
-    lexeme2 = yytext();
-    return Parser.RETURN;
+    return RETURN;
 }
 
 {_NAME} {
-    lexeme2 = yytext();
-    return Parser.NAME;
+    return NAME;
 }
 
 {_OPNAME} {
