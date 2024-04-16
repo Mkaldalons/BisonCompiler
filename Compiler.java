@@ -62,16 +62,20 @@ public class Compiler
     
     static void generateFunction( Object[] fun )
     {
-        emit("#\"%s[f%d]\" = ", (String) fun[0], (Integer) fun[1]);
+        // fun={name,argCount,localCount,body}
+        String name=(String)fun[0];
+        int argCount=(int)fun[1];
+        int localCount=(int)fun[2];
+        @SuppressWarnings("unchecked")
+        Vector<Object[]> body=(Vector<Object[]>)fun[3];
+        emit("#\"%s[f%d]\" =",name,argCount);
         emit("[");
-        if ((Integer) fun[2] != 0) {
+        if( localCount!=0 )
+        {
             emit("(MakeVal null)");
-            for (int i=0; i< (Integer) fun[2]; i++)
-                emit("(Push)");
+            for( int i=0 ; i!=localCount ; i++ ) emit("(Push)");
         }
-        for (Object f: (Object[]) fun[3])
-            generateExpr((Object[]) f);
-        emit("(Return)");
+        generateExpr(new Object[]{"BODY",body});
         emit("];");
     }
     
@@ -95,7 +99,7 @@ public class Compiler
     }
 
     static void generateBody(Object[] bod){
-        Object[] exprsArray = (Object[]) bod[1];
+        Vector<Object[]> exprsArray = (Vector<Object[]>) bod[1];
         Vector<Object[]> exprs = new Vector<>();
         for(Object expr: exprsArray){
             exprs.add((Object[]) expr);
@@ -104,6 +108,7 @@ public class Compiler
             generateExpr(expr);
         }
     }
+    
     
     static void generateExpr(Object[] e) {
         String type = (String) e[0];
